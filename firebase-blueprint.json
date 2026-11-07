@@ -1,0 +1,67 @@
+{
+  "entities": {
+    "BloodInventoryItem": {
+      "title": "BloodInventoryItem",
+      "description": "Represents an available blood bag or blood product in hospital inventory",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "bagNumber": { "type": "string", "maxLength": 64 },
+        "hospitalId": { "type": "string", "maxLength": 64 },
+        "hospitalName": { "type": "string", "maxLength": 128 },
+        "hospitalProvince": { "type": "string", "maxLength": 64 },
+        "bloodGroup": { "type": "string", "enum": ["A", "B", "O", "AB"] },
+        "rh": { "type": "string", "enum": ["Positive", "Negative"] },
+        "productType": { "type": "string", "enum": ["PRC", "FFP", "PC", "SDP", "CRYO", "WB", "LPRC"] },
+        "volumeMl": { "type": "number" },
+        "unitsAvailable": { "type": "number" },
+        "collectionDate": { "type": "string" },
+        "expiryDate": { "type": "string" },
+        "storageTemp": { "type": "string" },
+        "allowedTransactions": { "type": "array" },
+        "notes": { "type": "string", "maxLength": 500 },
+        "contactPerson": { "type": "string", "maxLength": 100 },
+        "contactPhone": { "type": "string", "maxLength": 32 },
+        "postedAt": { "type": "string" },
+        "anticoagulant": { "type": "string" },
+        "screeningPassed": { "type": "boolean" }
+      },
+      "required": ["bagNumber", "hospitalId", "bloodGroup", "rh", "productType", "unitsAvailable"]
+    },
+    "RequisitionOrder": {
+      "title": "RequisitionOrder",
+      "description": "Represents a blood requisition, borrow, exchange, or return order",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "orderNumber": { "type": "string", "maxLength": 64 },
+        "createdAt": { "type": "string" },
+        "requestingHospitalId": { "type": "string" },
+        "requestingHospitalName": { "type": "string" },
+        "requestingStaffName": { "type": "string" },
+        "requestingStaffEmail": { "type": "string" },
+        "requestingStaffPhone": { "type": "string" },
+        "issuingHospitalId": { "type": "string" },
+        "issuingHospitalName": { "type": "string" },
+        "issuingStaffName": { "type": "string" },
+        "issuingStaffPhone": { "type": "string" },
+        "status": { "type": "string" },
+        "items": { "type": "array" },
+        "coldChain": { "type": "object" },
+        "loanReturnDetails": { "type": "object" },
+        "timeline": { "type": "array" }
+      },
+      "required": ["orderNumber", "requestingHospitalId", "issuingHospitalId", "status", "items"]
+    }
+  },
+  "firestore": {
+    "/inventory/{itemId}": {
+      "schema": { "$ref": "#/entities/BloodInventoryItem" },
+      "description": "Collection of available blood bags and blood products across hospitals"
+    },
+    "/orders/{orderId}": {
+      "schema": { "$ref": "#/entities/RequisitionOrder" },
+      "description": "Collection of inter-hospital requisition, borrow, exchange, and return orders"
+    }
+  }
+}
